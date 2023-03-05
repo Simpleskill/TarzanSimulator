@@ -8,7 +8,7 @@ public class VineGrab : MonoBehaviour
     Transform currentVine;
     ConstantForce myConstForce;
 
-    bool swinging = false;
+    //bool swinging = false;
 
     void Start()
     {

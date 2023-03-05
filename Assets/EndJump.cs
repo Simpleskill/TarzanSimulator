@@ -26,6 +26,7 @@ public class EndJump : StateMachineBehaviour
     override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.SetBool("isJumping", false);
+        animator.SetBool("isFalling", true);
         // Implement code that processes and affects root motion
     }
 
