@@ -40,6 +40,14 @@ namespace SimplesDev.TarzanSimulator.Components
         private bool isRolling;
 
 
+        /**********         Swinging         **********/
+        private bool isSwinging;
+        private Transform currentVine;
+        private Transform lastVine;
+
+        /**********         Swinging         **********/
+        private bool isAlive;
+
         private void Start()
         {
             this.playerAnimator = this.GetComponent<Animator>();
@@ -49,19 +57,25 @@ namespace SimplesDev.TarzanSimulator.Components
 
         private void Update()
         {
+            if (!isAlive)
+                return;
             this.playerJumpInput = Input.GetKey(KeyCode.Space);
             this.playerJumpInputUp = Input.GetKeyUp(KeyCode.Space);
             this.playerJumpInputDown = Input.GetKeyDown(KeyCode.Space);
-            if (this.playerJumpInputDown && IsAnimatorReady()) isGoingToJump = true;
+            if (this.playerJumpInputDown && (IsAnimatorReady() || isSwinging)) isGoingToJump = true; // Jump from ground or vine
             isFalling = (this.playerRigidbody.velocity.y < -0.1f) ? true : false;
-            if (this.playerRigidbody.velocity.y < -5) isRolling = true;
+            if (this.playerRigidbody.velocity.y < -10) isRolling = true;
             AnimatorHandler();
         }
         
         private void FixedUpdate()
         {
-            this.MovePlayer();
+            if (!isAlive)
+                return;
+            if (!isSwinging) this.MovePlayer(); 
+                else transform.position = currentVine.transform.GetChild(0).position;
             if (this.isGoingToJump && this.IsPlayerGrounded()) this.Jump();
+            if (this.isGoingToJump && isSwinging) this.JumpFromVine();
             if (this.playerJumpInput && isJumping) this.JumpHigher();
             if (this.playerJumpInputUp) this.StopJump();
             if (isJumping && this.playerRigidbody.velocity.y < 0f && this.IsPlayerGrounded()) isJumping = false;
@@ -77,6 +91,19 @@ namespace SimplesDev.TarzanSimulator.Components
         {
             float airDecrease = (IsPlayerGrounded()) ? 1 : 0.8f;
             this.playerRigidbody.MovePosition(this.playerRigidbody.position + Vector3.right * (this.movementSpeed * Time.fixedDeltaTime * airDecrease));
+        }
+
+        private void JumpFromVine()
+        {
+            isGoingToJump = false;
+            isFalling = true;
+            lastVine = currentVine;
+            Vector3 vineVelocity = currentVine.GetComponent<Rigidbody>().velocity;
+            float ejectedVelocity = (vineVelocity.x > 2) ? 2 : (vineVelocity.x < -10) ? -10 : vineVelocity.x;
+            this.playerRigidbody.velocity = new Vector3(ejectedVelocity, vineVelocity.y+5,0);
+            this.playerRigidbody.useGravity = true;
+            isSwinging = false;
+            currentVine = null;
         }
 
         private void Jump()
@@ -105,12 +132,52 @@ namespace SimplesDev.TarzanSimulator.Components
             isJumping = false;
         }
 
-        private void AnimatorHandler()
+        public void GrabVine(Transform vine)
+        {
+            currentVine = vine;
+            isSwinging = true;
+            this.playerRigidbody.useGravity = false;
+            this.playerRigidbody.velocity = Vector3.zero;
+            transform.position = vine.transform.GetChild(0).position;
+            vine.gameObject.GetComponent<CapsuleCollider>().direction = 0;
+            Vector3 vineVelocityWhenGrabbed = new Vector3(25, 0, 0);
+            vine.gameObject.GetComponent<Rigidbody>().velocity = vineVelocityWhenGrabbed;
+        }
+
+
+
+        private void OnTriggerStay(Collider other)
+        {
+            if(other.tag == "Vine")
+            {
+                if (lastVine != null)
+                {
+                    if (!GameObject.ReferenceEquals(other.gameObject, lastVine.gameObject))
+                        GrabVine(other.transform);
+                }
+                else {
+                    GrabVine(other.transform);
+                }
+
+            }
+        }
+        void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.CompareTag("Blackhole"))
+            {
+                isAlive = false;
+                this.playerAnimator.SetBool("isAlive", false);
+            }
+        }
+
+            private void AnimatorHandler()
         {
             this.playerAnimator.SetBool("isGrounded", IsPlayerGrounded());
             this.playerAnimator.SetBool("isJumping", isJumping);
             this.playerAnimator.SetBool("isFalling", isFalling);
             this.playerAnimator.SetBool("isRolling", isRolling);
+            this.playerAnimator.SetBool("isSwinging", isSwinging);
+            this.playerAnimator.SetBool("isAlive", isAlive);
 
         }
 
@@ -125,6 +192,11 @@ namespace SimplesDev.TarzanSimulator.Components
             isGoingToJump = false;
             isFalling = false;
             isRolling = false;
+            isSwinging = false;
+            currentVine = null;
+            lastVine = null;
+            isAlive = true;
+
         }
     }
 }

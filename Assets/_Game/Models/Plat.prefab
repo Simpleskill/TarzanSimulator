@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5529621204087276983}
   - component: {fileID: 5529621204087276980}
   - component: {fileID: 5529621204087276981}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WalkablePlat
   m_TagString: Platform
   m_Icon: {fileID: 0}
@@ -109,9 +109,9 @@ GameObject:
   - component: {fileID: 5529621204213786706}
   - component: {fileID: 5529621204213786707}
   - component: {fileID: 5529621204213786704}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plat
-  m_TagString: Ground
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -203,7 +203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5529621204544438608}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
