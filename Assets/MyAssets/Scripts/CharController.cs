@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class CharController : MonoBehaviour
 {
     [SerializeField] Animator animator;
-
+    [SerializeField] GameObject gameCam;
 
     public Joystick walkJoystick;
 
@@ -19,7 +19,7 @@ public class CharController : MonoBehaviour
     public bool isJumping;
     public bool isFalling;
     private bool isWalking;
-    private bool isAlive;
+    public bool isAlive;
     public float turnSensitivity;
 
     public float jumpForce;
@@ -47,9 +47,17 @@ public class CharController : MonoBehaviour
     public float maxJumpAchieved = 0;
     public bool isPressed;
 
+    /* Vine System */
+    public Vector3 vineVelocityWhenGrabbed;
+    Transform currentSwingable;
+    bool isSwinging = false;
+
+
+
 
     private void Awake()
     {
+        isAlive = true;
         animator = gameObject.GetComponent<Animator>();
         moveForce = gameObject.GetComponent<ConstantForce>();
         rb = gameObject.GetComponent<Rigidbody>();
@@ -59,7 +67,6 @@ public class CharController : MonoBehaviour
     void Start()
     {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
-        isAlive = true;
         isJumping = false;
         //gameSpeed = 1;
         //walkSpeed = 5;
@@ -72,11 +79,11 @@ public class CharController : MonoBehaviour
         if (SystemInfo.supportsGyroscope)
         {
             Input.gyro.enabled = true;
-            Debug.Log("Allow Gyroscope");
+            //Debug.Log("Allow Gyroscope");
         }
         else
         {
-            Debug.Log("Don't Allow Gyroscope");
+            //Debug.Log("Don't Allow Gyroscope");
         }
     }
 
@@ -86,36 +93,9 @@ public class CharController : MonoBehaviour
         if (!isAlive)
             return;
 
-        Vector3 pos;
-        pos = transform.position;
-
-        //var horizontalMove = walkJoystick.Horizontal;
-        //var verticalMove = walkJoystick.Vertical;
-        //float x_move = Input.GetAxis("Vertical");
-        //float z_move = Input.GetAxis("Horizontal");
-        //pos.x += x_move * Time.deltaTime *5;
-        //pos.z -= z_move * Time.deltaTime *5;
-
-        if (curPlatform)
-        {
-            pos.x += Time.deltaTime * walkSpeed * gameSpeed;
-        }
-        else
-        {   // Reduce speed while in air
-            pos.x += Time.deltaTime * walkSpeed * gameSpeed * 0.8f; 
-        }
-
-        if ((Input.acceleration.x > 0 && pos.z > rightWall) || (Input.acceleration.x <= 0 && pos.z < leftWall))
-        {
-            pos.z -= Input.acceleration.x * turnSensitivity;// * 10;// Time.deltaTime;// * walkSpeed * gameSpeed;
-        }
-
-
-        transform.position = pos; //MOVE
-
-
+        WalkHandler();
         JumpingHandler();
-
+        SwingingHandler();
 
 
         Color red = Color.red;
@@ -160,12 +140,34 @@ public class CharController : MonoBehaviour
         {
             StartWalk();
         }
-        //if (isWalking && (Input.GetKeyUp("w") && (moveForce.force.x == 0)))
-        //{
-        //    Debug.Log("Stop Walk");
-        //    StopWalk();
-        //}
 
+
+    }
+
+
+    public void WalkHandler()
+    {
+
+        Vector3 pos;
+        pos = transform.position;
+
+
+        if (curPlatform)
+        {
+            pos.x += Time.deltaTime * walkSpeed * gameSpeed;
+        }
+        else
+        {   // Reduce speed while in air
+            pos.x += Time.deltaTime * walkSpeed * gameSpeed * 0.8f;
+        }
+
+        if ((Input.acceleration.x > 0 && pos.z > rightWall) || (Input.acceleration.x <= 0 && pos.z < leftWall))
+        {
+            pos.z -= Input.acceleration.x * turnSensitivity;// * 10;// Time.deltaTime;// * walkSpeed * gameSpeed;
+        }
+
+        if(!isSwinging)
+            transform.position = pos; //MOVE
 
     }
 
@@ -194,18 +196,15 @@ public class CharController : MonoBehaviour
             halfCounter = 0;
         }else if (( Input.GetMouseButton(0)) && isJumping &&  isHoldingJump) // Removed Input.GetKey(KeyCode.Space) ||
         {
-            //if (halfCounter == 0)
-            //    rb.AddForce(Vector3.up * 1f, ForceMode.VelocityChange);
-            // Se a tecla de espaço ainda está pressionada e o personagem está pulando
             float divisor = 0.2f;
             float timePassed = Time.time - jumpTime;
             float maxHalfs = Mathf.Floor(extraJumpTime / divisor);
             float halfMin = Mathf.Floor(timePassed / divisor);
-            Debug.Log("Passed: " + timePassed + " | maxHalfs: " + maxHalfs + " | halfMin: " + halfMin + " | halfCounter: "+ halfCounter);
+            //Debug.Log("Passed: " + timePassed + " | maxHalfs: " + maxHalfs + " | halfMin: " + halfMin + " | halfCounter: "+ halfCounter);
 
             if(halfMin >= 1 && maxHalfs>=halfCounter)
             {
-                Debug.Log("Up!!");
+                //Debug.Log("Up!!");
                 rb.AddForce(Vector3.up * 2, ForceMode.VelocityChange);
                 jumpTime = Time.time;
                 halfCounter++;
@@ -215,23 +214,6 @@ public class CharController : MonoBehaviour
             {
                 isHoldingJump = false;
             }
-
-
-
-
-            //if (timePassed < extraJumpTime && gameObject.transform.position.y<30)
-            //{                        // Se o tempo de salto extra ainda não acabou
-            //    float jumpMultiplier = 1f - timePassed / extraJumpTime;  // Calcula um multiplicador para a força do salto
-            //    float jumpForceThisFrame = jumpForce/2 + extraJumpForce * jumpMultiplier;  // Calcula a força do salto para essa frame
-            //    Debug.Log("Jumpforce frame  : " + jumpForceThisFrame);
-            //    rb.AddForce(Vector3.up * jumpForceThisFrame, ForceMode.VelocityChange);   // Aplica a força do salto
-            //    debugText.text = "jumpFrame: " + jumpForceThisFrame + "  isClicking: "+ Input.GetMouseButton(0) ;
-            //}
-
-            //else
-            //{
-            //    isHoldingJump = false;
-            //}
         }
         else
         {
@@ -242,14 +224,13 @@ public class CharController : MonoBehaviour
 
         if ((rb.velocity.y < 0 && isJumping && !isHoldingJump)| gameObject.transform.position.y > 30)
         {
-            Debug.Log("acabo");
             isJumping = false;
             if (!curPlatform)
                 isFalling = true;
             if (gameObject.transform.position.y > 30)
             {
                 rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                // Forçar a aplicação da gravidade
+
                 rb.velocity = new Vector3(rb.velocity.x, -10, rb.velocity.z);
             }
         }
@@ -262,15 +243,12 @@ public class CharController : MonoBehaviour
 
     public void StartWalk()
     {
-
-        //Debug.Log("Walk");
         isWalking = true;
         animator.SetBool("isWalking", isWalking);
     }
 
     public void StopWalk()
     {
-        //Debug.Log("Walk");
         isWalking = false;
         animator.SetBool("isWalking", isWalking);
     }
@@ -284,22 +262,66 @@ public class CharController : MonoBehaviour
         animator.SetBool("isJumping", isJumping);
     }
 
+    public void SwingingHandler()
+    {
+        animator.SetBool("isSwinging", isSwinging);
+        if(isSwinging == true && currentSwingable)
+        {
+            StopWalk();
+            //Debug.Log(currentSwingable.GetChild(0));
+            transform.position = currentSwingable.GetChild(0).transform.position;
+
+            Vector3 swingVel = currentSwingable.GetComponent<Rigidbody>().velocity;
+            Debug.Log(swingVel);
+            float swingVelX = swingVel.x;
+            if (swingVelX > 10)
+            {
+                swingVelX = 10;
+            }
+            if (!Input.GetMouseButton(0)){
+                isSwinging = false;
+                rb.velocity = new Vector3(swingVelX, swingVel.y+5, 0);
+                rb.useGravity = true;
+                isFalling = true;
+                currentSwingable = null;
+            }
+
+
+
+        }
+    }
+
+
+
+
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Platform"))
         {
             curPlatform = collision.gameObject;
-            // Do something when the character collides with a platform
         }
         if (collision.gameObject.CompareTag("Ground"))
         {
             if (isAlive)
             {
-                //StopWalk();
                 isAlive = false;
             }
-            // Do something when the character collides with a platform
+        }
+        if (collision.gameObject.CompareTag("Vine"))
+        {
+            if (isAlive && !isSwinging && Input.GetMouseButton(0))
+            {
+                gameCam.GetComponent<CameraFollow>().enabled = false;
+                rb.useGravity = false;
+                isSwinging = true;
+                currentSwingable = collision.transform;
+                isJumping = false;
+                isFalling = false;
+                curPlatform = null;
+                collision.gameObject.GetComponent<Rigidbody>().velocity = vineVelocityWhenGrabbed;
+                gameCam.GetComponent<CameraFollow>().enabled = true;
+            }
         }
     }
 
@@ -311,10 +333,5 @@ public class CharController : MonoBehaviour
             // Do something when the character stops colliding with a platform
         }
     }
-
-
-
-
-
 
 }

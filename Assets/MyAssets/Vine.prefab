@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &797498419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 797498420}
+  m_Layer: 0
+  m_Name: GrabPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &797498420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797498419}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.18, y: -4.54, z: -1.55}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6941006739489193955}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6941006738511651189
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +126,6 @@ GameObject:
   - component: {fileID: 6941006739071362683}
   - component: {fileID: 6941006739071362682}
   - component: {fileID: 6941006739071362681}
-  - component: {fileID: 6941006739071362680}
   - component: {fileID: 6941006739071362684}
   - component: {fileID: 6941006739071362685}
   m_Layer: 0
@@ -172,20 +202,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6941006739071362680
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6941006739071362695}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &6941006739071362684
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -194,13 +210,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6941006739071362695}
   serializedVersion: 2
-  m_Mass: 0.2
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 2
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!59 &6941006739071362685
 HingeJoint:
@@ -214,16 +230,16 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0, y: 100, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 2
+    spring: 100
+    damper: 0
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
     targetVelocity: 0
-    force: 0
+    force: 200
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -249,7 +265,6 @@ GameObject:
   - component: {fileID: 6941006739200484060}
   - component: {fileID: 6941006739200484049}
   - component: {fileID: 6941006739200484048}
-  - component: {fileID: 6941006739200484063}
   - component: {fileID: 6941006739200484062}
   - component: {fileID: 6941006739200484061}
   m_Layer: 0
@@ -326,20 +341,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6941006739200484063
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6941006739200484059}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &6941006739200484062
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -354,7 +355,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 2
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!59 &6941006739200484061
 HingeJoint:
@@ -368,16 +369,16 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0, y: 100, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 2
+    spring: 100
+    damper: 0
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
     targetVelocity: 0
-    force: 0
+    force: 200
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -403,7 +404,6 @@ GameObject:
   - component: {fileID: 6941006739262690223}
   - component: {fileID: 6941006739262690222}
   - component: {fileID: 6941006739262690221}
-  - component: {fileID: 6941006739262690220}
   - component: {fileID: 6941006739262690218}
   - component: {fileID: 6941006739262690219}
   m_Layer: 0
@@ -480,20 +480,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6941006739262690220
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6941006739262690217}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &6941006739262690218
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -508,7 +494,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 2
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!59 &6941006739262690219
 HingeJoint:
@@ -522,16 +508,16 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0, y: 100, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 2
+    spring: 100
+    damper: 0
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
     targetVelocity: 0
-    force: 0
+    force: 200
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -617,7 +603,7 @@ GameObject:
   - component: {fileID: 6941006739489193956}
   m_Layer: 0
   m_Name: Section (6)
-  m_TagString: Untagged
+  m_TagString: Vine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -633,7 +619,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -6.12, z: 0}
   m_LocalScale: {x: 0.2, y: 0.5, z: 0.2}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 797498420}
   m_Father: {fileID: 6941006739312246112}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -699,9 +686,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5000001
-  m_Height: 2
+  m_Height: 5.183092
   m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0.0000000745058, y: 1.591546, z: -0.0000000745058}
 --- !u!54 &6941006739489193957
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -716,7 +703,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 2
+  m_Constraints: 16
   m_CollisionDetection: 0
 --- !u!59 &6941006739489193956
 HingeJoint:
@@ -730,16 +717,16 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0, y: 100, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 2
+    spring: 100
+    damper: 0
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
     targetVelocity: 0
-    force: 0
+    force: 200
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -1017,7 +1004,6 @@ GameObject:
   - component: {fileID: 6941006739854826333}
   - component: {fileID: 6941006739854826332}
   - component: {fileID: 6941006739854826331}
-  - component: {fileID: 6941006739854826330}
   - component: {fileID: 6941006739854826328}
   - component: {fileID: 6941006739854826329}
   m_Layer: 0
@@ -1094,20 +1080,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6941006739854826330
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6941006739854826343}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &6941006739854826328
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1122,7 +1094,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 2
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!59 &6941006739854826329
 HingeJoint:
@@ -1136,16 +1108,16 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0, y: 100, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 2
+    spring: 100
+    damper: 0
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
     targetVelocity: 0
-    force: 0
+    force: 200
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -1255,7 +1227,6 @@ GameObject:
   - component: {fileID: 6941006739985081251}
   - component: {fileID: 6941006739985081250}
   - component: {fileID: 6941006739985081249}
-  - component: {fileID: 6941006739985081248}
   - component: {fileID: 6941006739985081262}
   - component: {fileID: 6941006739985081263}
   m_Layer: 0
@@ -1332,20 +1303,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6941006739985081248
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6941006739985081261}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &6941006739985081262
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1360,7 +1317,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 2
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!59 &6941006739985081263
 HingeJoint:
@@ -1374,16 +1331,16 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0, y: 100, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 2
+    spring: 100
+    damper: 0
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
     targetVelocity: 0
-    force: 0
+    force: 200
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
@@ -1493,7 +1450,6 @@ GameObject:
   - component: {fileID: 6941006740511248626}
   - component: {fileID: 6941006740511248631}
   - component: {fileID: 6941006740511248630}
-  - component: {fileID: 6941006740511248629}
   - component: {fileID: 6941006740511248628}
   - component: {fileID: 6941006740511248627}
   m_Layer: 0
@@ -1570,20 +1526,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6941006740511248629
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6941006740511248625}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &6941006740511248628
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1598,7 +1540,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 2
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!59 &6941006740511248627
 HingeJoint:
@@ -1612,16 +1554,16 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: 0}
+  m_ConnectedAnchor: {x: 0, y: 100, z: 0}
   m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 2
+    spring: 100
+    damper: 0
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
     targetVelocity: 0
-    force: 0
+    force: 200
     freeSpin: 0
   m_UseLimits: 0
   m_Limits:
