@@ -3228,6 +3228,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   isJumping: 0
   isFalling: 0
+  isRolling: 0
   isAlive: 0
   turnSensitivity: 0
   jumpForce: 5

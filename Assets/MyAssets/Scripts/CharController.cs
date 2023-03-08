@@ -18,6 +18,7 @@ public class CharController : MonoBehaviour
 
     public bool isJumping;
     public bool isFalling;
+    public bool isRolling;
     private bool isWalking;
     public bool isAlive;
     public float turnSensitivity;
@@ -68,6 +69,7 @@ public class CharController : MonoBehaviour
     {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         isJumping = false;
+        isRolling = false;
         //gameSpeed = 1;
         //walkSpeed = 5;
         //moveSpeed = 5f;
@@ -92,10 +94,10 @@ public class CharController : MonoBehaviour
         animator.SetBool("isAlive", isAlive);
         if (!isAlive)
             return;
-
         WalkHandler();
         JumpingHandler();
         SwingingHandler();
+        RollHandler();
 
 
         Color red = Color.red;
@@ -144,7 +146,11 @@ public class CharController : MonoBehaviour
 
     }
 
+    public void RollHandler()
+    {
+        //animator.SetBool("isRolling", isRolling);
 
+    }
     public void WalkHandler()
     {
 
@@ -283,7 +289,9 @@ public class CharController : MonoBehaviour
                 rb.velocity = new Vector3(swingVelX, swingVel.y+5, 0);
                 rb.useGravity = true;
                 isFalling = true;
+                isRolling = true;
                 currentSwingable = null;
+                animator.SetBool("isRolling", isRolling);
             }
 
 
