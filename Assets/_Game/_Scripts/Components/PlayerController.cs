@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Numerics;
 using SimplesDev.TarzanSimulator.Types;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 using Vector3 = UnityEngine.Vector3;
 
 namespace SimplesDev.TarzanSimulator.Components
@@ -48,8 +50,19 @@ namespace SimplesDev.TarzanSimulator.Components
         /**********         Swinging         **********/
         private bool isAlive;
 
+
+        /**********         UI         **********/
+        [Space]
+        [Header("UI")]
+        public Button retryBtn;
+
         private void Start()
         {
+            if (SystemInfo.supportsGyroscope)
+            {
+                Input.gyro.enabled = true;
+                Debug.Log("Gyroscope enabled");
+            }
             this.playerAnimator = this.GetComponent<Animator>();
             this.playerRigidbody = this.GetComponent<Rigidbody>();
             InitializeVaraibles();
@@ -59,9 +72,9 @@ namespace SimplesDev.TarzanSimulator.Components
         {
             if (!isAlive)
                 return;
-            this.playerJumpInput = Input.GetKey(KeyCode.Space);
-            this.playerJumpInputUp = Input.GetKeyUp(KeyCode.Space);
-            this.playerJumpInputDown = Input.GetKeyDown(KeyCode.Space);
+            this.playerJumpInput = Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0);
+            this.playerJumpInputUp = Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0);
+            this.playerJumpInputDown = Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0);
             if (this.playerJumpInputDown && (IsAnimatorReady() || isSwinging)) isGoingToJump = true; // Jump from ground or vine
             isFalling = (this.playerRigidbody.velocity.y < -0.1f) ? true : false;
             if (this.playerRigidbody.velocity.y < -10) isRolling = true;
@@ -72,8 +85,11 @@ namespace SimplesDev.TarzanSimulator.Components
         {
             if (!isAlive)
                 return;
-            if (!isSwinging) this.MovePlayer(); 
-                else transform.position = currentVine.transform.GetChild(0).position;
+            if (!isSwinging)
+            {
+                this.MovePlayer();
+            }
+            else transform.position = currentVine.transform.GetChild(0).position;
             if (this.isGoingToJump && this.IsPlayerGrounded()) this.Jump();
             if (this.isGoingToJump && isSwinging) this.JumpFromVine();
             if (this.playerJumpInput && isJumping) this.JumpHigher();
@@ -89,6 +105,24 @@ namespace SimplesDev.TarzanSimulator.Components
       
         private void MovePlayer()
         {
+
+            //var z = Input.gyro.attitude.z;
+            //Debug.Log("z"+z);
+
+
+            //Vector3 v3 = this.transform.position;
+
+            //v3.z += z;
+            //this.transform.position = v3;
+
+
+            // Gyroscope mobile rotate left or right character
+            var dirZ = Input.acceleration.x * 20f *-1;
+            this.playerRigidbody.velocity = new Vector3(this.playerRigidbody.velocity.x, this.playerRigidbody.velocity.y, dirZ);
+
+
+
+
             float airDecrease = (IsPlayerGrounded()) ? 1 : 0.8f;
             this.playerRigidbody.MovePosition(this.playerRigidbody.position + Vector3.right * (this.movementSpeed * Time.fixedDeltaTime * airDecrease));
         }
@@ -148,7 +182,7 @@ namespace SimplesDev.TarzanSimulator.Components
 
         private void OnTriggerStay(Collider other)
         {
-            if(other.tag == "Vine")
+            if(other.tag == "VineGrab")
             {
                 if (lastVine != null)
                 {
@@ -167,6 +201,7 @@ namespace SimplesDev.TarzanSimulator.Components
             {
                 isAlive = false;
                 this.playerAnimator.SetBool("isAlive", false);
+                retryBtn.gameObject.SetActive(true);
             }
         }
 
@@ -197,6 +232,9 @@ namespace SimplesDev.TarzanSimulator.Components
             lastVine = null;
             isAlive = true;
 
+        }
+        public bool IsAlive() {
+            return isAlive;
         }
     }
 }
