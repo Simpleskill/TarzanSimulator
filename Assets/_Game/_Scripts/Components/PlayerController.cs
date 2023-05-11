@@ -94,37 +94,64 @@ namespace SimplesDev.TarzanSimulator.Components
             if (this.isGoingToJump && isSwinging) this.JumpFromVine();
             if (this.playerJumpInput && isJumping) this.JumpHigher();
             if (this.playerJumpInputUp) this.StopJump();
-            if (isJumping && this.playerRigidbody.velocity.y < 0f && this.IsPlayerGrounded()) isJumping = false;
+            if (isJumping && this.playerRigidbody.velocity.y < 0f && this.IsPlayerGrounded()) {
+                Debug.Log("stop jumping higher");
+                isJumping = false;
+            }
+
+            HorizontalMove();
         }
 
         private bool IsPlayerGrounded()
         {
             this.groundCheckRay = new Ray(this.groundCheck.position, Vector3.down);
-            return Physics.Raycast(groundCheckRay, 0.7f, LayerMask.GetMask("Ground"));
+
+            bool res = Physics.Raycast(groundCheckRay, 0.7f, LayerMask.GetMask("Ground"));
+
+            return res;
+
         }
       
+
+        private void HorizontalMove()
+        {
+            var dirZ = Input.acceleration.x * 20f * -1;
+
+            float speed = Mathf.Clamp(dirZ, -20.0f, 20.0f);
+            Vector3 vel = new Vector3(this.playerRigidbody.velocity.x, this.playerRigidbody.velocity.y, speed);
+
+            //Debug.Log("vel: " + vel);
+            this.playerRigidbody.velocity = vel;
+
+
+            //Vector3 pos = new Vector3(this.playerRigidbody.position.x, this.playerRigidbody.position.y, this.playerRigidbody.position.z + speed/100);
+
+
+            //this.playerRigidbody.position = pos;
+
+            //this.playerRigidbody.AddForce(Vector3.right * 1f, ForceMode.VelocityChange);
+
+
+
+
+
+
+
+
+        }
+
         private void MovePlayer()
         {
-
-            //var z = Input.gyro.attitude.z;
-            //Debug.Log("z"+z);
-
-
-            //Vector3 v3 = this.transform.position;
-
-            //v3.z += z;
-            //this.transform.position = v3;
-
-
-            // Gyroscope mobile rotate left or right character
-            var dirZ = Input.acceleration.x * 20f *-1;
-            this.playerRigidbody.velocity = new Vector3(this.playerRigidbody.velocity.x, this.playerRigidbody.velocity.y, dirZ);
-
-
-
-
             float airDecrease = (IsPlayerGrounded()) ? 1 : 0.8f;
-            this.playerRigidbody.MovePosition(this.playerRigidbody.position + Vector3.right * (this.movementSpeed * Time.fixedDeltaTime * airDecrease));
+            Vector3 forwardMovement = Vector3.right * (this.movementSpeed * Time.fixedDeltaTime * airDecrease);
+            
+            
+            transform.position += forwardMovement;
+
+            
+            
+            
+            //this.playerRigidbody.MovePosition(this.playerRigidbody.position + Vector3.right * (this.movementSpeed * Time.fixedDeltaTime * airDecrease));
         }
 
         private void JumpFromVine()
@@ -143,10 +170,12 @@ namespace SimplesDev.TarzanSimulator.Components
         private void Jump()
         {
             isGoingToJump = false;
+            this.playerRigidbody.velocity = new Vector3(this.playerRigidbody.velocity.x, 0.5f, this.playerRigidbody.velocity.z);
             this.playerRigidbody.AddForce(Vector3.up * this.jumpForce, ForceMode.Impulse);
             isJumping = true;
             isRolling = false;
             jumpTimeCounter = jumpTime;
+            Debug.Log(this.playerRigidbody.velocity.y);
         }
         private void JumpHigher()
         {
@@ -197,12 +226,14 @@ namespace SimplesDev.TarzanSimulator.Components
         }
         void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.CompareTag("Blackhole"))
+            if (collision.gameObject.CompareTag("Blackhole") ||
+                collision.gameObject.CompareTag("Obstacle"))
             {
                 isAlive = false;
                 this.playerAnimator.SetBool("isAlive", false);
                 retryBtn.gameObject.SetActive(true);
             }
+
         }
 
             private void AnimatorHandler()
@@ -215,6 +246,7 @@ namespace SimplesDev.TarzanSimulator.Components
             this.playerAnimator.SetBool("isAlive", isAlive);
 
         }
+
 
         private bool IsAnimatorReady()
         {

@@ -8,6 +8,8 @@ TagManager:
   - Vine
   - Blackhole
   - VineGrab
+  - Wall
+  - Obstacle
   layers:
   - Default
   - TransparentFX
