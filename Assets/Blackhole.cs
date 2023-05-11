@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using SimplesDev.TarzanSimulator.Managers;
 
-public class Blackhole : MonoBehaviour
+namespace SimplesDev.TarzanSimulator.Components
 {
-    // Start is called before the first frame update
-    void Start()
+    public class Blackhole : MonoBehaviour
     {
-        
-    }
+        GameManager gm;
+        private void Start()
+        {
+            gm = GameManager.Instance;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void FixedUpdate()
+        {
+            this.transform.position = new Vector3(gm.character.position.x,this.transform.position.y,this.transform.position.z);
+        }
     }
 }
